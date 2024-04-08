@@ -60,7 +60,7 @@ function BPEV.kanohi_nuva_search(baseC,aoeop,id,searchfilter,searchop,hintmsg)
     return c:IsType(TYPE_MONSTER) and c:IsAbleToRemoveAsCost()
   end
   local function filterB(c)
-    return c:IsSetCard(0xb0c) and c:IsType(TYPE_FUSION)
+    return c:IsFaceup() and c:IsSetCard(0x3b02)
   end
   local function cost(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then 
@@ -128,7 +128,8 @@ function BPEV.nuva_symbol_search(baseC,targetCode,qStr)
   end
   local function operation(e,tp,eg,ep,ev,re,r,rp)
     local addFilter=filterA
-    if Duel.IsExistingMatchingCard(filterB,tp,LOCATION_HAND,0,1,nil,tp) then
+    if Duel.IsExistingMatchingCard(filterB,tp,LOCATION_HAND,0,1,nil,tp)
+    and Duel.IsExistingMatchingCard(filterC,tp,LOCATION_DECK,0,1,nil) then
       if (not Duel.IsExistingMatchingCard(filterA,tp,LOCATION_DECK,0,1,nil)) or Duel.SelectYesNo(tp,qStr) then
         Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONFIRM)
         local rg=Duel.SelectMatchingCard(tp,filterB,tp,LOCATION_HAND,0,1,1,nil,tp)
@@ -156,7 +157,7 @@ function BPEV.nuva_symbol_search(baseC,targetCode,qStr)
 end
 function BPEV.nuva_symbol_punish(baseC,punish,punishtg)
   local function filter(c)
-    return c:IsFaceup() and c:IsSetCard(0xb0c) and c:IsType(TYPE_FUSION)
+    return c:IsFaceup() and c:IsSetCard(0x3b02)
   end
   local function condition(e,tp,eg,ep,ev,re,r,rp)
     return e:GetHandler():IsFaceup() and not e:GetHandler():IsLocation(LOCATION_DECK)
