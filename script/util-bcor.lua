@@ -34,3 +34,17 @@ function BCOR.rahi_insect_spsum(baseC,pstg,psop)
     e:SetOperation(operation)
     return e
 end
+function BCOR.check_rahi_marine_isabletopzone(c,tp)
+    return Duel.CheckPendulumZones(tp) and c:CheckUniqueOnField(tp) and not c:IsForbidden()
+end
+function BCOR.operation_rahi_marine_return(c,tp,exstr,pzstr)
+    local op=Duel.SelectEffect(tp,
+        {c:IsAbleToExtra(),exstr},
+        {bcor.check_rahi_marine_isabletopzone(c,tp),pzstr}
+    )
+    if op==1 then
+        return (Duel.SendtoExtraP(c,nil,REASON_EFFECT)>0)
+    elseif op==2 then
+        return Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
+    end
+end
