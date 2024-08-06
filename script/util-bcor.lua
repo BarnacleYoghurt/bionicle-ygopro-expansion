@@ -48,3 +48,53 @@ function BCOR.operation_rahi_marine_return(c,tp,exstr,pzstr)
         return Duel.MoveToField(c,tp,tp,LOCATION_PZONE,POS_FACEUP,true)
     end
 end
+function BCOR.rahi_beast_granteff(baseC,ge,desc2)
+    local function condition_inherit(e,tp,eg,ep,ev,re,r,rp)
+        return r==REASON_SYNCHRO and re:GetHandler():IsSetCard(0xb06)
+    end
+    local function operation_inherit(e,tp,eg,ep,ev,re,r,rp)
+        local c=re:GetHandler()
+        local e1=ge:Clone()
+        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+        if desc2 then e1:SetDescription(desc2) end
+        c:RegisterEffect(e1)
+        if not c:IsType(TYPE_EFFECT) then
+            local e2=Effect.CreateEffect(e:GetHandler())
+            e2:SetType(EFFECT_TYPE_SINGLE)
+            e2:SetCode(EFFECT_ADD_TYPE)
+            e2:SetValue(TYPE_EFFECT)
+            e2:SetReset(RESET_EVENT+RESETS_STANDARD)
+            c:RegisterEffect(e2,true)
+        end
+    end
+    local function condition(e,tp,eg,ep,ev,re,r,rp)
+        return r==REASON_SYNCHRO
+    end
+    local function operation(e,tp,eg,ep,ev,re,r,rp)
+        local c=re:GetHandler()
+        local e1=ge:Clone()
+        e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+        c:RegisterEffect(e1)
+        local e2=Effect.CreateEffect(e:GetHandler())
+        e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+        e2:SetCode(EVENT_BE_MATERIAL)
+        e2:SetCondition(condition_inherit)
+        e2:SetOperation(operation_inherit)
+        c:RegisterEffect(e2)
+        if not c:IsType(TYPE_EFFECT) then
+            local e3=Effect.CreateEffect(e:GetHandler())
+            e3:SetType(EFFECT_TYPE_SINGLE)
+            e3:SetCode(EFFECT_ADD_TYPE)
+            e3:SetValue(TYPE_EFFECT)
+            e3:SetReset(RESET_EVENT+RESETS_STANDARD)
+            c:RegisterEffect(e3,true)
+        end
+    end
+
+    local e=Effect.CreateEffect(baseC)
+	e:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e:SetCode(EVENT_BE_MATERIAL)
+	e:SetCondition(condition)
+	e:SetOperation(operation)
+	return e
+end
