@@ -88,6 +88,7 @@ function s.operation4(e,tp,eg,ep,ev,re,r,rp)
             function(cg) return cg:CheckDifferentProperty(Card.GetCode) end,
             1,tp,HINTMSG_ATOHAND)
         if Duel.SendtoHand(sg,tp,REASON_EFFECT)>0 and sg:IsExists(Card.IsLocation,1,nil,LOCATION_HAND) then
+            Duel.ConfirmCards(1-tp,sg)
             Duel.BreakEffect()
             Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
             local gg=Duel.SelectMatchingCard(tp,Card.IsAbleToGrave,tp,LOCATION_HAND|LOCATION_ONFIELD,0,1,1,nil)
