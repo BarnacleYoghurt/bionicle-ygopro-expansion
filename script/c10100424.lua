@@ -45,7 +45,6 @@ function s.operation1(e,tp,eg,ep,ev,re,r,rp)
         e1:SetRange(LOCATION_MZONE)
         e1:SetCondition(s.condition1_1)
         e1:SetOperation(s.operation1_1)
-        e1:SetCountLimit(1)
         e1:SetReset(RESET_EVENT|RESETS_STANDARD)
         c:RegisterEffect(e1,true)
         c:AddMonsterAttributeComplete()
@@ -61,4 +60,5 @@ function s.condition1_1(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.operation1_1(e,tp,eg,ep,ev,re,r,rp)
     Duel.NegateEffect(ev)
+    e:Reset()
 end
