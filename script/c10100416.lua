@@ -29,7 +29,7 @@ function s.filter1a(c,e)
     return c:IsCanBeEffectTarget(e) and c:IsAbleToDeck()
 end
 function s.filter1b(c,tp)
-    return c:IsSetCard(SET_TOA) or c:IsSetCard(SET_MATORAN) or c:IsSetCard(SET_TURAGA)
+    return c:IsSetCard({SET_TOA,SET_MATORAN,SET_TURAGA}) and c:IsControler(tp)
 end
 function s.rescon1(sg,e,tp,mg)
     return sg:IsExists(s.filter1b,1,nil,tp)
