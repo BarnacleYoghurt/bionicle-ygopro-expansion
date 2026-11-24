@@ -23,26 +23,12 @@ function s.initial_effect(c)
     e2:SetOperation(s.operation2)
     e2:SetCountLimit(1,{id,1})
     c:RegisterEffect(e2)
-    --Track resolved monster effects
-    aux.GlobalCheck(s,function()
-        local ge=Effect.CreateEffect(c)
-        ge:SetType(EFFECT_TYPE_FIELD|EFFECT_TYPE_CONTINUOUS)
-        ge:SetCode(EVENT_CHAIN_SOLVING)
-        ge:SetOperation(s.checkop_res)
-        Duel.RegisterEffect(ge,0)
-    end)
-end
-function s.checkop_res(e,tp,eg,ep,ev,re,r,rp)
-    if re:IsMonsterEffect() then
-        Duel.RegisterFlagEffect(tp,id,RESET_PHASE|PHASE_END,0,1)
-    end
 end
 function s.filter1(c)
     return c:IsFaceup() and (c:IsSetCard(SET_TOA) or c:IsSetCard(SET_MATORAN) or c:IsSetCard(SET_TURAGA))
 end
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
     return Duel.IsExistingMatchingCard(s.filter1,tp,LOCATION_MZONE,0,1,nil)
-       and Duel.GetFlagEffect(tp,id)==0
        and (re:IsMonsterEffect() or re:IsHasType(EFFECT_TYPE_ACTIVATE)) and Duel.IsChainNegatable(ev)
 end
 function s.target1(e,tp,eg,ep,ev,re,r,rp,chk)
@@ -53,6 +39,17 @@ function s.target1(e,tp,eg,ep,ev,re,r,rp,chk)
     end
 end
 function s.activate1(e,tp,eg,ep,ev,re,r,rp)
+    --Cannot activate monster effects
+    local e1=Effect.CreateEffect(e:GetHandler())
+    e1:SetDescription(aux.Stringid(id,0))
+    e1:SetType(EFFECT_TYPE_FIELD)
+    e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET|EFFECT_FLAG_CLIENT_HINT)
+    e1:SetTargetRange(1,0)
+    e1:SetCode(EFFECT_CANNOT_ACTIVATE)
+    e1:SetValue(function(_,re) return re:IsMonsterEffect() end)
+    e1:SetReset(RESET_PHASE|PHASE_END)
+    Duel.RegisterEffect(e1,tp)
+
     local ec=re:GetHandler()
     if Duel.NegateActivation(ev) and ec:IsRelateToEffect(re) then
         ec:CancelToGrave()
