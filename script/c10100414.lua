@@ -44,7 +44,7 @@ function s.initial_effect(c)
 end
 function s.condition1(e,tp,eg,ep,ev,re,r,rp)
     return eg:IsExists(Card.IsControler,1,nil,1-tp)
-       and not Duel.IsExistingMatchingCard(aux.NOT(Card.IsAttribute),tp,LOCATION_GRAVE,0,1,nil,ATTRIBUTE_WATER)
+       and not Duel.IsExistingMatchingCard(Card.IsAttributeExcept,tp,LOCATION_GRAVE,0,1,nil,ATTRIBUTE_WATER)
 end
 function s.target1(e,tp,eg,ep,ev,re,r,rp,chk)
     local c=e:GetHandler()
